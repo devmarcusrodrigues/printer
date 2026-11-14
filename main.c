@@ -223,9 +223,9 @@ void fecharConexao(void) {
     }
 
     int retorno = FechaConexaoImpressora();
-    conexaoAberta = 0;
 
     if (retorno == 0) {
+        conexaoAberta = 0;
         printf("Conexao encerrada.\n");
     } else {
         printf("Erro, codigo: %d\n", retorno);
