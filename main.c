@@ -181,23 +181,22 @@ void configurarConexao(void) {
 
 // LOGIN ABAIXO - Assinado, Marcus
 
-void fazerLogin(void){
+int fazerLogin(void){
     char user[32];
     char pass[32];
-    for (int tries = 0; tries < 3; tries++){
-        printf("Digite o nome de usuário: ");
+    for (int tries = 1; tries < 4; tries++){
         // strings não precisam de indicador de ponteiro, mas se não querer rodar, põe e vê
-        scanf("%s\n", user);
-        printf("Digite a senha: ");
-        scanf("%s\n", pass);
+        capturarEntrada("Digite o nome de usuario: ", user, sizeof(user));
+        capturarEntrada("Digite a senha: ", pass, sizeof(pass));
 
-        int accessCheck = strcmp(user, "admin") + strcmp(pass, "1234");
-        if (accessCheck == 0){
+        if ((strcmp(user, "admin") == 0) && (strcmp(pass, "1234") == 0)){
             return 1;
         } else {
-            printf("Login inválido. Tentativas utilizadas: %d de 3", tries);
+            printf("Tentativa de login falha. Tentativa %d de 3", tries);
         }
     }
+    printf("Acesso negado\n");
+    return 0;
 }
 
 // ------------------------------------
@@ -217,7 +216,20 @@ void abrirConexao(void) {
 }
 
 void fecharConexao(void) {
-    
+    // verifica se a conexão está fechada, e se estiver, ele retorna nada
+    if (!conexaoAberta) {
+        printf("A conexao ja esta fechada.\n");
+        return;
+    }
+
+    int retorno = FechaConexaoImpressora();
+    conexaoAberta = 0;
+
+    if (retorno == 0) {
+        printf("Conexao encerrada.\n");
+    } else {
+        printf("Erro, codigo: %d\n", retorno);
+    }
 }
 
 void imprimirTexto(void) {
@@ -265,6 +277,27 @@ void exibirMenu(void) {
 
     printf("1  - Configurar Conexao\n");    
     printf("--------------------------------------\n");
+    printf("2  - Abrir Conexao\n");    
+    printf("--------------------------------------\n");
+    printf("3  - Fechar Conexao\n");    
+    printf("--------------------------------------\n");
+    printf("4  - Imprimir texto\n");    
+    printf("--------------------------------------\n");
+    printf("5  - Imprimir QR Code\n");    
+    printf("--------------------------------------\n");
+    printf("6  - Imprimir codigo de barras\n");    
+    printf("--------------------------------------\n");
+    printf("7  - Imprimir XML SAT\n");    
+    printf("--------------------------------------\n");
+    printf("8  - Imprimir XML de cancelamento SAT\n");    
+    printf("--------------------------------------\n");
+    printf("9  - Abrir gaveta (Elgin)\n");    
+    printf("--------------------------------------\n");
+    printf("10  - Abrir gaveta\n");    
+    printf("--------------------------------------\n");
+    printf("11  - Sinal sonoro\n");    
+    printf("--------------------------------------\n");
+    printf("0  - Sair\n");
 }
 
 /* ===================== Programa principal ===================== */
