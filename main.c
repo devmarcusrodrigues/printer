@@ -179,6 +179,29 @@ void configurarConexao(void) {
     }
 }
 
+// LOGIN ABAIXO - Assinado, Marcus
+
+void fazerLogin(void){
+    char user[32];
+    char pass[32];
+    for (int tries = 0; tries < 3; tries++){
+        printf("Digite o nome de usuário: ");
+        // strings não precisam de indicador de ponteiro, mas se não querer rodar, põe e vê
+        scanf("%s\n", user);
+        printf("Digite a senha: ");
+        scanf("%s\n", pass);
+
+        int accessCheck = strcmp(user, "admin") + strcmp(pass, "1234");
+        if (accessCheck == 0){
+            return 1;
+        } else {
+            printf("Login inválido. Tentativas utilizadas: %d de 3", tries);
+        }
+    }
+}
+
+// ------------------------------------
+
 void abrirConexao(void) {
     if (!conexaoAberta) {
         int retorno = AbreConexaoImpressora(tipo, modelo, conexao, parametro);
