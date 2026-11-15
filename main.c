@@ -232,16 +232,75 @@ void fecharConexao(void) {
     }
 }
 
+/*IMPRESSAO - Assinado Ujhafsuy*/
+
 void imprimirTexto(void) {
-   
+    if (!conexaoAberta) {
+        printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
+        return;
+    }
+
+    char texto[200];
+    capturarEntrada("Texto a imprimir: ", texto, sizeof(texto));
+    int copias = lerInteiro("Quantas copias? ");
+
+    for(int i = 1; i <= copias; i++){
+        int retorno = ImpressaoTexto(texto, 1, 4,0);
+
+        if(retorno == 0){
+            printf("Copia %d impressa!\n", i);
+        } else {
+            printf("Erro ao imprimir. Codigo %d\n", retorno);
+        }
+    }
+   Corte(5);
 }
+
+/*QRCODE - Assinado Ujhafsuy*/
 
 void imprimirQRCode(void) {
-    
+    if (!conexaoAberta) {
+        printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
+        return;
+    }
+
+    char dados[200];
+    capturarEntrada("Texto a imprimir: ", dados, sizeof(dados));
+    int copias = lerInteiro("Quantas copias? ");
+
+    for(int i = 1; i <= copias; i++){
+        int retorno = ImpressaoQRCode(dados, 6, 4,0);
+
+        if(retorno == 0){
+            printf("Copia %d impressa!\n", i);
+        } else {
+            printf("Erro ao imprimir. Codigo %d\n", retorno);
+        }
+    }
+   Corte(5);
 }
 
+
+
 void imprimirCodigoBarras(void) {
-    
+    if (!conexaoAberta) {
+        printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
+        return;
+    }
+
+    int copias = lerInteiro("Quantas copias? ");
+
+    for(int i = 1; i <= copias; i++){
+        int retorno = ImpressaoCodigoBarras(8, "{A012345678912", 100, 2, 3);
+
+
+        if(retorno == 0){
+            printf("Copia %d impressa!\n", i);
+        } else {
+            printf("Erro ao imprimir. Codigo %d\n", retorno);
+        }
+    }
+   Corte(5);
 }
 
 void imprimirXMLSAT(void) {
