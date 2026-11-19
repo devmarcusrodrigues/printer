@@ -304,21 +304,72 @@ void imprimirCodigoBarras(void) {
 }
 
 void imprimirXMLSAT(void) {
-    
-        /* le o arquivo XML (na raiz do projeto) para a memoria */
-        //char *dadosXML = lerArquivo("XMLSAT.xml");
-        
+    /* 1) conexao aberta? Se nao, avisa e sai sem perguntar nada */
+    if (!conexaoAberta) {
+        printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
+        return;
+    }
+
+    /* 2) le o arquivo XML (na raiz do projeto) para a memoria */
+    char *dadosXML = lerArquivo("XMLSAT.xml");
+    if (dadosXML == NULL) {
+        printf("Nao foi possivel ler o XMLSAT.xml\n");
+        return;
+    }
+
+    /* 3) chama o comando e corta o papel */
+    int retorno = ImprimeXMLSAT(dadosXML, 0);
+    Corte(5);
+
+    /* devolve a memoria */
+    free(dadosXML);
+
+    /* 4) confere o retorno */
+    if (retorno == 0) {
+        printf("XML SAT impresso!\n");
+    } else {
+        printf("Erro ao imprimir XML SAT. Codigo: %d\n", retorno);
+    }   
 }
 
 void imprimirXMLCancelamentoSAT(void) {
-    	
-    	/* le o arquivo XML (na raiz do projeto) para a memoria */
-        //char *dadosXML = lerArquivo("CANC_SAT.xml");
-        
+    	if (!conexaoAberta) {
+        printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
+        return;
+    }
+
+    /* le o arquivo XML (na raiz do projeto) para a memoria */
+    char *dadosXML = lerArquivo("CANC_SAT.xml");
+    if (dadosXML == NULL) {
+        printf("Nao foi possivel ler o CANC_SAT.xml\n");
+        return;
+    }
+ 
+    int retorno = ImprimeXMLCancelamentoSAT(dadosXML, ASS_QRCODE, 0);
+
+    /* devolve a memoria */
+    free(dadosXML);
+
+    if (retorno == 0) {
+        printf("XML de cancelamento SAT impresso!\n");
+    } else {
+        printf("Erro ao imprimir cancelamento SAT. Codigo: %d\n", retorno);
+    }
 }
 
 void abrirGavetaElgin(void) {
-    
+    if (!conexaoAberta) {
+        printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
+        return;
+    }
+
+    int retorno = AbreGavetaElgin(1, 50, 50);
+
+    if (retorno == 0) {
+        printf("Gaveta aberta!\n");
+    } else {
+        printf("Erro ao abrir a gaveta. Codigo: %d\n", retorno);
+    }
 }
 
 void abrirGaveta(void) {
