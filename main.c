@@ -372,12 +372,51 @@ void abrirGavetaElgin(void) {
     }
 }
 
+/* GAVETA E SINAL SONORO - Assinado Pedro */
+
+/* Abre a gaveta de dinheiro com o comando generico AbreGaveta (pino 1, tempos 5 e 10) */
 void abrirGaveta(void) {
-    
+    /* 1) conexao aberta? Se nao, avisa e sai */
+    if (!conexaoAberta) {
+        printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
+        return;
+    }
+
+    /* 2) chama o comando */
+    int retorno = AbreGaveta(1, 5, 10);
+
+    /* 3) confere o retorno */
+    if (retorno == 0) {
+        printf("Gaveta aberta!\n");
+    } else {
+        printf("Erro ao abrir a gaveta. Codigo: %d\n", retorno);
+    }
 }
 
+/* Faz a impressora apitar. O usuario escolhe quantos apitos (1 a 63) */
 void emitirSinalSonoro(void) {
-    
+    /* 1) conexao aberta? Se nao, avisa e sai sem perguntar nada */
+    if (!conexaoAberta) {
+        printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
+        return;
+    }
+
+    /* 2) pergunta a quantidade, repetindo ate ser um valor valido */
+    int quantidade = lerInteiro("Quantos apitos (1 a 63)? ");
+    while (quantidade < 1 || quantidade > 63) {
+        printf("Quantidade invalida. Digite um numero de 1 a 63.\n");
+        quantidade = lerInteiro("Quantos apitos (1 a 63)? ");
+    }
+
+    /* 3) chama o comando */
+    int retorno = SinalSonoro(quantidade, 50, 5);
+
+    /* 4) confere o retorno */
+    if (retorno == 0) {
+        printf("Sinal sonoro emitido %d vez(es)!\n", quantidade);
+    } else {
+        printf("Erro ao emitir sinal sonoro. Codigo: %d\n", retorno);
+    }
 }
 
 void exibirMenu(void) {
@@ -418,12 +457,51 @@ int main(void) {
         return 1;
     }
 
+    /* Login: 3 tentativas. Se errar todas, encerra o programa */
+    if (!fazerLogin()) {
+        printf("Acesso negado.\n");
+        FreeLibrary(dll);
+        return 1;
+    }
+    printf("Login realizado com sucesso!\n");
+
+    /* Laco do menu: repete ate o usuario escolher 0 (sair) */
     int opcao = -1;
     while (opcao != 0) {
         exibirMenu();
         opcao = lerInteiro("\nDigite a opcao desejada: ");
 
-        //...
+        if (opcao == 1) {
+            configurarConexao();
+        } else if (opcao == 2) {
+            abrirConexao();
+        } else if (opcao == 3) {
+            fecharConexao();
+        } else if (opcao == 4) {
+            imprimirTexto();
+        } else if (opcao == 5) {
+            imprimirQRCode();
+        } else if (opcao == 6) {
+            imprimirCodigoBarras();
+        } else if (opcao == 7) {
+            imprimirXMLSAT();
+        } else if (opcao == 8) {
+            imprimirXMLCancelamentoSAT();
+        } else if (opcao == 9) {
+            abrirGavetaElgin();
+        } else if (opcao == 10) {
+            abrirGaveta();
+        } else if (opcao == 11) {
+            emitirSinalSonoro();
+        } else if (opcao == 0) {
+            /* ao sair, fecha a conexao se ela ainda estiver aberta */
+            if (conexaoAberta) {
+                fecharConexao();
+            }
+            printf("Saindo do programa...\n");
+        } else {
+            printf("Opcao invalida.\n");
+        }
     }
 
     FreeLibrary(dll);
